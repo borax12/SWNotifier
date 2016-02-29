@@ -35,30 +35,37 @@ public class NotificationListener extends NotificationListenerService implements
 
         Log.d("SWNOTIFIER", "Notification posted" + sbn.getPackageName());
 
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+        if(sbn.getPackageName().equals("com.whatsapp")
+                ||sbn.getPackageName().equals("com.google.android.apps.inbox")
+                ||sbn.getPackageName().equals("com.Slack")
+                ||sbn.getPackageName().equals("com.twitter.android")){
 
-            Toast.makeText(this, "NO LE Support.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
 
-        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
+                Toast.makeText(this, "NO LE Support.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
 
-            enableBTIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(enableBTIntent);
+                Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 
-        }
+                enableBTIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(enableBTIntent);
 
-        BluetoothManager manager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+            }
 
-        bluetoothAdapter = manager.getAdapter();
+            BluetoothManager manager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+
+            bluetoothAdapter = manager.getAdapter();
 
 
-        if (selectedDevice == null) {
-            startScan();
-        } else {
-            vibrateBand();
+            if (selectedDevice == null) {
+                startScan();
+            } else {
+                vibrateBand();
+            }
+
         }
 
 
